@@ -300,7 +300,13 @@
   }
   
   .newsletter-header { margin-bottom: 20px; }
-  
+  .header-logo {
+  font-family: "Montserrat Alternates", sans-serif; 
+  font-weight: 700;
+  text-decoration: none; 
+  color: #000; 
+  font-size:1.5rem;
+}
   .newsletter-title {
     color: var(--onyx);
     font-size: var(--fs-2);
