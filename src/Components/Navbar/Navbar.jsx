@@ -1,182 +1,195 @@
-import React from 'react'
-import newsletter from '../../assets/images/newsletter.png';
-import jewellery_1 from '../../assets/images/products/jewellery-1.jpg'
+import React, { useState } from 'react'
 import logo from '../../assets/images/logo/logo.svg'
-import HeaderLinks from '../HeaderLinks/HeaderLinks';
 import { useRef } from 'react';
-export default function Navbar({changeMode}) {
-    const modelRef=useRef();
-    const notificationlRef=useRef();
+import { Link, useNavigate } from 'react-router-dom';
+import { ApiContext } from '../../Context/ApiContext';
+import { useContext } from 'react';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom'
 
-    const hideModel=()=>{
-        modelRef.current.classList.toggle('closed')
+export default function Navbar({userData}) {
+    let {cartNum,getUserCart,getUserLoves,userLove,hidenotificaton,getSearchData,getOrders,ShowSlideBar}=useContext(ApiContext)
+    const [userState, setUserState] = useState(!!localStorage.getItem("userToken"));
+    const navigate=useNavigate()
+    const searchRef = useRef(null);
+    const location = useLocation();
+    const isSidebarAvailable = location.pathname === '/';
+    // Load user data on userState
+    useEffect(()=>{
+        getUserCart();
+        getUserLoves();
+        const token = localStorage.getItem("userToken");
+        if (token) {
+        setUserState(token);
+        }
+    },[userState]);
+    // Trigger search on Enter key
+    const handleKeyPress = (event) => {
+        if(event.key=='Enter'){
+            getSearchData(searchRef.current.value)
+        }
+    };
+    // Fetch search results on input
+    function getTextFoSearch(){
+        getSearchData(searchRef.current.value)
     }
-    const hideNotification=()=>{
-        notificationlRef.current.classList.toggle('closed')
-        console.log(notificationlRef.current);
+    // Log out user and redirect
+    async function Logout(){
+        localStorage.removeItem("userToken");
+        setUserState(false); // Update state to trigger re-render
+        navigate("/login");
+        window.location.reload();
     }
-    function test(){
-        const Mode=document.getElementById('Mode');
-        changeMode(Mode.value)
-    }
-    
+    //Fetch initial empty search results
+    useEffect(()=>{
+        getSearchData('')
+    },[])
   return (
+    
     <div className='body'>
-            <div class="overlay" data-overlay></div>
-            <div class="modal" ref={modelRef} data-modal>
-
-<div class="modal-close-overlay" data-modal-overlay></div>
-
-<div class="modal-content">
-
-  <button class="modal-close-btn" onClick={hideModel} data-modal-close>
-  <i class="fa-solid fa-xmark"></i>
-  </button>
-
-  <div class="newsletter-img">
-    <img src={newsletter} alt="subscribe newsletter" width="400" height="400"/>
-  </div>
-
-  <div class="newsletter">
-
-    <form action="#">
-
-      <div class="newsletter-header">
-
-        <h3 class="newsletter-title">Subscribe Newsletter.</h3>
-
-        <p class="newsletter-desc">
-          Subscribe the <b>Anon</b> to get latest products and discount update.
-        </p>
-
-      </div>
-
-      <input type="email" name="email" class="email-field" placeholder="Email Address" required/>
-
-      <button type="submit" class="btn-newsletter">Subscribe</button>
-
-    </form>
-
-  </div>
-
-</div>
-
-            </div>
-
-            <div class="notification-toast  "  ref={notificationlRef}  data-toest>
-                <button class="toast-close-btn" onClick={hideNotification} data-toest-close>
-                    <i class="fa-solid fa-xmark"></i>
+            <div className="overlay" data-overlay></div>
+            <div className="notification-toast bg-success" id="notificationTest" data-toest>
+                <button className="toast-close-btn"  data-toest-close>
+                    <i className="fa-solid fa-xmark text-danger" onClick={hidenotificaton} ></i>
                 </button>
-                <div class="toast-banner">
-                    <img src={jewellery_1} alt="Rose Gold Earringd" width="80" height="70"/>
-                </div>
-                <div class="toast-details">
-                    <p class="toast-message">Someone is now just bought</p>
-                    <p class="toast-title">Rose Gold Earring</p>
-                    <p class="toast-meta"><time datatime="PT2M">2 Minutes </time>age</p>
-                </div>
+                <div className='text-white' id="notification_text"></div>
             </div>
             <header>
-           
-                <div class="header-top">
+                <div className="header-top">
+                    <div className="container">
+                    <ul className="header-social-container">
+                        <li>
+                        <a href="#" className="social-link">
+                            <i className="fa-brands fa-facebook"></i>
+                        </a>
+                        </li>
+                        <li>
+                        <a href="#" className="social-link">
+                        <i className="fa-brands fa-twitter"></i>
+                        </a>
+                        </li>
+                        <li>
+                        <a href="#" className="social-link">
+                        <i className="fa-brands fa-instagram"></i>
+                        </a>
+                        </li>
+                        <li>
+                        <a href="#" className="social-link">
+                        <i className="fa-brands fa-linkedin"></i>
+                        </a>
+                        </li>
+                    </ul>
+                    <div className="header-alert-news">
+                    <div className=''>
+                                    <div className="container">
+                                        <ul className='nav'>
+                                            <li className='nav-item'><Link className='nav-link ' to="/">Home</Link></li>
+                                            <li className='nav-item'><Link className='nav-link ' to="/about">About</Link></li>
+                                            <li className='nav-item'><Link className='nav-link ' to="/services">Services</Link></li>                                         
+                                        </ul>
+                                    </div>
+                                </div>
+                    </div>
 
-    <div class="container">
-
-    <ul class="header-social-container">
-
-        <li>
-        <a href="#" class="social-link">
-            <i class="fa-brands fa-facebook"></i>
-        </a>
-        </li>
-
-        <li>
-        <a href="#" class="social-link">
-        <i class="fa-brands fa-twitter"></i>
-        </a>
-        </li>
-
-        <li>
-        <a href="#" class="social-link">
-        <i class="fa-brands fa-instagram"></i>
-        </a>
-        </li>
-
-        <li>
-        <a href="#" class="social-link">
-        <i class="fa-brands fa-linkedin"></i>
-        </a>
-        </li>
-
-    </ul>
-
-    <div class="header-alert-news">
-        <p>
-        <b>Free Shipping</b>
-        This Week Order Over - $55
-        </p>
-    </div>
-
-    <div class="header-top-actions">
-
-        <select name="currency">
-
-        <option value="usd">USD &dollar;</option>
-        <option value="eur">EUR &euro;</option>
-
-        </select>
-
-        <select name="language">
-
-        <option value="en-US">English</option>
-        <option value="es-ES">Espa&ntilde;ol</option>
-        <option value="fr">Fran&ccedil;ais</option>
-
-        </select>
-
-    </div>
-
-    </div>
-
+                    <div className="header-top-actions">
+                        {userState?<button onClick={Logout}><Link to="#" >Logout</Link></button>:<>
+                        <Link to="/login"><div className='nav-link'>Login</div></Link>
+                        <Link to="/signup"><div className='nav-link'>Register</div></Link>
+                        </>}
+                        {userState?(
+                        <div className='user-image'>
+                            <Link to="/profile">
+                                <button className="action-btn">
+                                    {userData?.user?.imageProfile?<img className='rounded rounded-circle' src={userData.user.imageProfile} alt="User Profile"></img>
+                                    :<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzBXNuO6PezhC18aYH_2cYtS0I7KbxoKYdwA&usqp=CAU"></img>}                  
+                                </button>
+                            </Link>
+                        </div>)
+                        :null}
+                    </div>
+                    </div>
                 </div>
-                <div class="header-main">
-                    <div class="container">
-                    <a href="#" class="header-logo">
-                        <img src={logo} alt="Anon's logo" width="120" height="36"/>
+                <div className="header-main">
+                    <div className="container">
+                    <a alt="logo" href="#" className="header-logo">
+                        Emergancey
                     </a>
-                    <div class="header-search-container">
-
-                        <input type="search" name="search" class="search-field" placeholder="Enter your product name..."/>
-
-                        <button class="search-btn">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-
+                    <Link to="/search">
+                    <div className="input-group mb-3 w-100 m-auto mt-4">
+                    <span onClick={getTextFoSearch} className="input-group-text" id="basic-addon1"><i className="fa-solid fa-magnifying-glass"></i></span>
+                    <input id="searchInput" ref={searchRef} onKeyPress={handleKeyPress}  type="text" className="form-control  "   placeholder="Search Product...." aria-label="Username" aria-describedby="basic-addon1"/>
                     </div>
-
-                    <div class="header-user-actions">
-
-                        <button class="action-btn">
-                            <i class="fa-solid fa-user"></i>
-                        </button>
-
-                        <button class="action-btn">
-                        <i class="fa-solid fa-heart"></i>
-                            <span class="count">0</span>
-                        </button>
-
-                        <button class="action-btn">
-                        <i class="fa-solid fa-bag-shopping"></i>
-                        <span class="count">0</span>
-                        </button>
-
+                    </Link>
+                    
+                    <div className="header-user-actions">
+                        {userData && userData.user.isAdmin ? (
+                            <Link to="/dashBoard">
+                                <button className="action-btn">
+                                <i className="fa-solid fa-table"></i>
+                            </button>
+                            </Link>
+                            
+                            
+                        ) : (
+                        <div className='header-user-actions'>
+                            
+                            <Link to="/cardsloves">
+                                <button className="action-btn">
+                                <i className="fa-solid fa-heart"></i>
+                                {
+                                userLove?
+                                <span className="count">{userLove}</span>
+                                    :null
+                                }
+                                </button>
+                            </Link>
+                            <button className="action-btn">
+                                <Link to="/cardsBought" className='text-dark'>
+                                <i className="fa-solid fa-cart-shopping"></i>
+                                {userData?
+                                <span className="count">{cartNum}</span>
+                                :null}
+                                </Link>
+                            </button>
+                        </div>
+                        )}                 
                     </div>
-
                     </div>
                 </div>
-                
             </header>
-            
-        </div>
+            <div className="mobile-bottom-navigation">
+                {isSidebarAvailable && (
+                    <button onClick={ShowSlideBar} className="action-btn">
+                    <i className="fa-solid fa-bars"></i>
+                    </button>
+                )}
+                {userData && userData.user.isAdmin ? "" : (
+                    <button className="action-btn">
+                    <Link to="/cardsloves" className='text-dark'>
+                        <i className="fa-solid fa-heart"></i>
+                        {userLove ? <span className="count">{userLove}</span> : null}
+                    </Link>
+                    </button>
+                )}
+                    <button className="action-btn">
+                      <Link to="/" className='text-dark'>
+                        <i className="fa-solid fa-house"></i>
+                      </Link>
+                    </button>
+                    {userData && userData.user.isAdmin ? "" : (
+                      <button className="action-btn">
+                        <Link to="/cardsBought" className='text-dark'>
+                          <i className="fa-solid fa-cart-shopping"></i>
+                          {cartNum ? <span className="count">{cartNum}</span> : null}
+                        </Link>
+                      </button>
+                    )}
+                    {userData && userData.user.isAdmin ? (
+                      <button className="action-btn" data-mobile-menu-open-btn>
+                        <i className="fa-solid fa-border-all"></i>
+                      </button>
+                    ) : ""}
+            </div>
+    </div>
   )
 }

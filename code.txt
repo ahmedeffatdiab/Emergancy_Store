@@ -1,0 +1,24 @@
+
+  {/* <tbody>
+                {cart.selectedProduct.length>=1?(
+                    cart.selectedProduct.map((ele,index)=>{
+                        return <tr>
+                                    <th scope="row">1</th>
+                                    <td>{ele.name} </td>
+                                    <td>{ele.price}  </td>
+                                    <td>
+                                        <button className='btn btn-primary mx-2'>-</button>
+                                        <span className='mx-2'>
+                                        {ele.quantity}
+                                        </span>
+                                        <button className='btn btn-info mx-2'>+</button>
+                                    </td>
+                                    <td>
+                                        <button className='btn btn-danger mx-1'>delete</button>
+                                        <button className='btn btn-success mx-1'>save</button>
+                                    </td>
+                                </tr>
+                    })
+                )
+                :<div className='alert alert-danger'>You not bought any Products yet</div>}
+            </tbody> */}

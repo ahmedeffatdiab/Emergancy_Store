@@ -1,0 +1,209 @@
+import React, { useState } from 'react'
+import logo from '../../assets/images/logo/logo.svg'
+import { useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { ApiContext } from '../../Context/ApiContext';
+import { useContext } from 'react';
+import { useEffect } from 'react';
+
+export default function Navbar({userData}) {
+    let {cartNum,getUserCart,getUserLoves,userLove,hidenotificaton,getSearchData}=useContext(ApiContext)
+    const searchRef = useRef(null);
+    useEffect(()=>{
+        getUserCart();
+        getUserLoves();
+    },[])
+    const handleKeyPress = (event) => {
+        if(event.key=='Enter'){
+            getSearchData(searchRef.current.value)
+        }
+    };
+    function getTextFoSearch(){
+        getSearchData(searchRef.current.value)
+    }
+    useEffect(()=>{
+        getSearchData('')
+    },[])
+  return (
+    
+    <div className='body'>
+            <div className="overlay" data-overlay></div>
+            {/* <div className="modal" ref={modelRef} data-modal>
+
+                <div className="modal-close-overlay" data-modal-overlay></div>
+                    <div className="modal-content">
+
+                    <button className="modal-close-btn" onClick={hideModel} data-modal-close>
+                    <i className="fa-solid fa-xmark"></i>
+                    </button>
+
+                    <div className="newsletter-img">
+                        <img src={newsletter} alt="subscribe newsletter" width="400" height="400"/>
+                    </div>
+
+                    <div className="newsletter">
+
+                        <form action="#">
+
+                        <div className="newsletter-header">
+
+                            <h3 className="newsletter-title">Subscribe Newsletter.</h3>
+
+                            <p className="newsletter-desc">
+                            Subscribe the <b>Anon</b> to get latest products and discount update.
+                            </p>
+
+                        </div>
+
+                        <input type="email" name="email" className="email-field" placeholder="Email Address" required/>
+
+                        <button type="submit" className="btn-newsletter">Subscribe</button>
+
+                        </form>
+
+                    </div>
+
+                    </div>
+            </div> */}
+            <div className="notification-toast bg-success" id="notificationTest" data-toest>
+                <button className="toast-close-btn"  data-toest-close>
+                    <i className="fa-solid fa-xmark text-danger" onClick={hidenotificaton} ></i>
+                </button>
+                <div className='text-white' id="notification_text"></div>
+            </div>
+            <header>
+                <div className="header-top">
+                    <div className="container">
+
+                    <ul className="header-social-container">
+                        <li>
+                        <a href="#" className="social-link">
+                            <i className="fa-brands fa-facebook"></i>
+                        </a>
+                        </li>
+
+                        <li>
+                        <a href="#" className="social-link">
+                        <i className="fa-brands fa-twitter"></i>
+                        </a>
+                        </li>
+
+                        <li>
+                        <a href="#" className="social-link">
+                        <i className="fa-brands fa-instagram"></i>
+                        </a>
+                        </li>
+
+                        <li>
+                        <a href="#" className="social-link">
+                        <i className="fa-brands fa-linkedin"></i>
+                        </a>
+                        </li>
+
+                    </ul>
+
+                    <div className="header-alert-news">
+                    <div className=''>
+                                    <div className="container">
+                                        <ul className='nav'>
+                                            <li className='nav-item'><Link className='nav-link ' to="">Home</Link></li>
+                                            <li className='nav-item'><Link className='nav-link ' to="">About</Link></li>
+                                            <li className='nav-item'><Link className='nav-link ' to="">Services</Link></li>
+                                            {userData?null:<>
+                                                <li className='nav-item'><Link className='nav-link ' to="login">Login</Link></li>
+                                                <li className='nav-item'><Link className='nav-link ' to="signup">Signin</Link></li>
+                                            </>}
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                    </div>
+
+                    <div className="header-top-actions">
+
+                        <select name="currency">
+
+                        <option value="usd">USD &dollar;</option>
+                        <option value="eur">EUR &euro;</option>
+
+                        </select>
+
+                        <select name="language">
+
+                        <option value="en-US">English</option>
+                        <option value="es-ES">Espa&ntilde;ol</option>
+                        <option value="fr">Fran&ccedil;ais</option>
+
+                        </select>
+                        {/* <div className='user-image'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzBXNuO6PezhC18aYH_2cYtS0I7KbxoKYdwA&usqp=CAU"></img>
+                        </div> */}
+                    </div>
+
+                    </div>
+                </div>
+                <div className="header-main">
+                    <div className="container">
+                    <a href="#" className="header-logo">
+                        <img src={logo} alt="Anon's logo" width="120" height="36"/>
+                    </a>
+                    {/* <div className="header-search-container">
+
+                        <input type="search" name="search" className="search-field" placeholder="Enter your product name..."/>
+
+                        <button className="search-btn">
+                        <i className="fa-solid fa-magnifying-glass"></i>
+                        </button>
+
+                    </div> */}
+                        <Link to="/search">
+                        <div className="input-group mb-3 w-100 m-auto mt-4">
+                        <span onClick={getTextFoSearch} className="input-group-text" id="basic-addon1"><i className="fa-solid fa-magnifying-glass"></i></span>
+                        <input id="searchInput" ref={searchRef} onKeyPress={handleKeyPress}  type="text" className="form-control  "   placeholder="Search Product...." aria-label="Username" aria-describedby="basic-addon1"/>
+                        </div>
+                        </Link>
+                    <div className="header-user-actions">
+                        <Link to="/profile">
+                            <button className="action-btn">
+                                <i className="fa-solid fa-user"></i>
+                            </button>
+                        </Link>
+                        <Link to="/cardsloves">
+                            <button className="action-btn">
+                            <i className="fa-solid fa-heart"></i>
+                            {
+                            userLove?
+                            <span className="count">{userLove}</span>
+                                :null
+                            }
+                            </button>
+                        </Link>
+                        <button className="action-btn">
+                            <Link to="/cardsBought" className='text-dark'>
+                            <i className="fa-solid fa-cart-shopping"></i>
+                            {userData?
+                            <span className="count">{cartNum}</span>
+                            :null}
+                            </Link>
+                        </button>
+                        <button className="action-btn">
+                            <Link to="/cardsBought" className='text-dark'>
+                            {userData && userData.user.isAdmin && (
+                                <button className="action-btn">
+                                    {/* <i class="fa-solid fa-table"></i> */}
+                                    <Link to="/cardsBought" className="text-dark">
+                                    <i className="fa-solid fa-cart-shopping"></i>
+                                    <span className="count">{cartNum}</span>
+                                    </Link>
+                                </button>
+                            )}
+                            </Link>
+                        </button>
+                                             
+                    </div>
+                    </div>
+                </div>
+            </header>
+        </div>
+  )
+}

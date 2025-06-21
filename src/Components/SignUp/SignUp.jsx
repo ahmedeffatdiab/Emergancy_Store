@@ -1,71 +1,117 @@
-import React from 'react'
+import React, { useState } from 'react'
 import HeaderLinks from '../HeaderLinks/HeaderLinks'
 import Footer from '../Footer/Footer'
+import Joi from 'joi'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 export default function SignUp() {
-    function showLogin(){
-        const container=document.getElementById('containerSignUp');
-            container.classList.add("active");
+    let navigate=useNavigate()
+    let [User,setUser]=useState({
+        username:'',
+        email:'',
+        password:'',
+        con_password:''
+    })
+    const [userError,serUserError]=useState([])
+    const [serverValidation,serServerValidation]=useState({})
+    const [isLoading,setIsLoading]=useState(false)
+    // Update user data from input
+    const getUserData=(e)=>{
+        let UserData={...User};
+        UserData[e.target.name]=e.target.value;
+        setUser(UserData)
     }
-    function hideLogin(){
-        const container=document.getElementById('containerSignUp');
-            container.classList.remove("active");
+    // Validate registration form user input
+    const validationForm=()=>{
+        let Schema=Joi.object({
+            username:Joi.string().min(4).max(15).required(),
+            email:Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com'] } }).pattern(new RegExp('^[a-zA-Z0-9._%+-]+@gmail\.com$')),
+            password:Joi.string().min(6).max(15).required(),
+            con_password:Joi.string().min(6).max(15).required().messages({
+                    'string.min': 'confirm Password must be at least 6 characters long',
+                    'string.max': 'confirm Password must be at most 15 characters long',
+                    'any.required': 'confirm Password is required',
+                }),
+        })
+        return Schema.validate(User,{abortEarly: false})
     }
-  return (
-    <div className='bg-color'>
-        <HeaderLinks/>
-        <div className='signUp'>
-        <div className="containerSignUp" id='containerSignUp'>
-            <div class="form-container sign-up">
-                <form>
-                    <h1>Create Account</h1>
-                    <div class="social-icons">
-                        <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-                        <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
-                        <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+    // Send signup data to server
+    async function sendDataToServer(){
+        let res=await axios.post('https://emergancy-api-zdep.vercel.app/auth/SignUp',User)
+        console.log(res);
+        if(res.data.message==="success"){
+            navigate('/login')
+        }else{
+            setIsLoading(false)
+            serServerValidation(res.data.message)
+        }
+    }
+    // Validate form and submit data
+    const submitData=(e)=>{
+        e.preventDefault();
+        setIsLoading(true)
+        let validationResult=validationForm();
+        if(validationResult.error){
+            serUserError(validationResult.error.details)
+            console.log(validationResult);
+            setIsLoading(false)
+        }else{
+            sendDataToServer()
+        }
+    }
+return (
+    <div>
+        <div className='container'>
+            <div className='w-100 my-2'>
+                <div className='w-50  m-auto py-2 px-3 my-4 SignUp text-white '>
+                    <div className='w-100 m-auto text-center'>
+                        <h2>SignUp</h2>
                     </div>
-                    <span>or use your email for registeration</span>
-                    <input type="text" placeholder="Name"/>
-                    <input type="email" placeholder="Email"/>
-                    <input type="password" placeholder="Password"/>
-                    <button>Sign Up</button>
-                </form>
-            </div>
-            <div class="form-container sign-in">
-            <form>
-                <h1>Sign In</h1>
-                <div class="social-icons">
-                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
-                    <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                    {serverValidation.length>1?
+                        <div className='alert alert-danger'>{serverValidation}</div>
+                    :null}
+                    <form method='post' onSubmit={submitData} action=''>
+                        <label htmlFor='username'>username</label>
+                        <input onChange={getUserData} type='text' className='rounded-3 ps-2 my-1' name='username' placeholder="Enter Username .. "/>
+                        {userError.find(err => err.context.key === 'username') && (
+                            <div className=" py-1" style={{fontSize:"14px",color:"yellow",fontWeight:"bold"}}>
+                                {userError.find(err => err.context.key === 'username').message}
+                            </div>
+                        )}
+                        <label htmlFor='email'>email</label>
+                        <input onChange={getUserData} type='text' className='rounded-3 ps-2 my-1' name='email' placeholder="Enter Email .. "/>
+                        {userError.find(err => err.context.key === 'email') && (
+                            <div className=" py-1" style={{fontSize:"14px",color:"yellow",fontWeight:"bold"}}>
+                                {userError.find(err => err.context.key === 'email').message}
+                            </div>
+                        )}
+                        <label htmlFor='password'>password</label>
+                        <input onChange={getUserData} type='password' className='rounded-3 ps-2 my-1' name='password' placeholder="Enter Password .. "/>
+                        {userError.find(err => err.context.key === 'password') && (
+                            <div className=" py-1" style={{fontSize:"14px",color:"yellow",fontWeight:"bold"}}>
+                                {userError.find(err => err.context.key === 'password').message}
+                            </div>
+                        )}
+                        <label htmlFor='con-password'>confirm_Password</label>
+                        <input onChange={getUserData} type='password' className='rounded-3 ps-2 my-1' name='con_password' placeholder="Confirm Password .. "/>
+                        {userError.find(err => err.context.key === 'con_password') && (
+                            <div className=" py-1" style={{fontSize:"14px",color:"yellow",fontWeight:"bold"}}>
+                                {userError.find(err => err.context.key === 'con_password').message}
+                            </div>
+                        )}
+                        <button type='submit' className='btn btn-info my-2'>{isLoading?<i className='fas fa-spinner fa-spin fa-2x'></i>:"SignUp"}</button>
+                    </form>
+                    <div className='w-100 text-center my-1'>
+                                <span className='d-inline text-dark '>You Have an Account ? </span>
+                                <Link className='d-inline text-decoration-underline ' to='/login'>Login</Link>
+                    </div>
                 </div>
-                <span>or use your email password</span>
-                <input type="email" placeholder="Email"/>
-                <input type="password" placeholder="Password"/>
-                <a href="#">Forget Your Password?</a>
-                <button>Sign In</button>
-            </form>
+                
             </div>
-            <div class="toggle-container">
-            <div class="toggle">
-                <div class="toggle-panel toggle-left">
-                    <h1>Welcome Back!</h1>
-                    <p>Enter your personal details to use all of site features</p>
-                    <button class="hidden" onClick={hideLogin} id="login">Sign In</button>
-                </div>
-                <div class="toggle-panel toggle-right">
-                    <h1>Hello, Friend!</h1>
-                    <p>Register with your personal details to use all of site features</p>
-                    <button class="hidden" onClick={showLogin} id="register">Sign Up</button>
-                </div>
-            </div>
-            </div>
+            
         </div>
-
-        </div>
-        <Footer/>
+    <Footer/>
     </div>
-   
-  )
+
+)
 }
