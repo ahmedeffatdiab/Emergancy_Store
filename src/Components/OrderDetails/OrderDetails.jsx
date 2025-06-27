@@ -13,7 +13,7 @@ const OrderDetails = () => {
     // Fetch order details by ID
     async function getOrderDetails(id){
      try{
-        const resData=await axios.get(`https://emergancy-api-zdep.vercel.app/orderDetailsNumber/${id}`,{
+        const resData=await axios.get(`https://emergancy-api-kqk9.vercel.app/orderDetailsNumber/${id}`,{
             headers:{
                 Authorization: `Bearer ${token}`
             }

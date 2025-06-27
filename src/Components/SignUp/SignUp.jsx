@@ -37,7 +37,11 @@ export default function SignUp() {
     }
     // Send signup data to server
     async function sendDataToServer(){
-        let res=await axios.post('https://emergancy-api-zdep.vercel.app/auth/SignUp',User)
+        let res=await axios.post('https://emergancy-api-kqk9.vercel.app/auth/SignUp',User,{
+            headers : {
+            'Content-Type': 'application/json',
+            }
+        })
         console.log(res);
         if(res.data.message==="success"){
             navigate('/login')

@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Profile({ saveUserData }) {
   const navigate = useNavigate();
-  const { shownotificatonTest } = useContext(ApiContext);
+  const { showPurchaseAlert } = useContext(ApiContext);
   const [userInfo, setUserInfo] = useState({});
   const [selectedFile, setSelectedFile] = useState(null);
   const [user, setUser] = useState({ username: '', email: '' });
@@ -48,7 +48,7 @@ export default function Profile({ saveUserData }) {
 
     try {
       const res = await axios.post(
-        'https://emergancy-api-zdep.vercel.app/auth/changeProfileImage',
+        'https://emergancy-api-kqk9.vercel.app/auth/changeProfileImage',
         formData,
         {
           headers: {
@@ -56,16 +56,18 @@ export default function Profile({ saveUserData }) {
           },
         }
       );
-      if (res.data.message=="Image updated sucessfully!") {
+      console.log(res)
+      if (res.data.message==="Image updated successfully!") {
         console.log(res.data.user)
         setUserInfo(res.data.user);
-      //  localStorage.removeItem("userToken");
-       navigate("/login")
+        localStorage.removeItem("userToken");
+        navigate("/login")
+        showPurchaseAlert("👍 Profile image updated successfully!");
       }
     } catch (err) {
       console.error(err);
     } finally {
-    setLoadingImage(false); // Stop loading
+    setLoadingImage(false); 
   }
   };
   //This function handles changes to the profile input fields (username or email).
@@ -99,19 +101,21 @@ export default function Profile({ saveUserData }) {
     } else {
       try {
         const res = await axios.post(
-          'https://emergancy-api-zdep.vercel.app/auth/editUserInfo',
+          'https://emergancy-api-kqk9.vercel.app/auth/editUserInfo',
           user,
           {
             headers: {
+              'Content-Type': 'application/json',
               token: `Bearer ${localStorage.getItem('userToken')}`,
+              
             },
           }
         );
-
-        if (res.data.message === 'updated successuflly') {
-          shownotificatonTest("Changed data successfully!<br>Please login again.");
+        console.log(res)
+        if (res.data.message === "Updated successfully") {
           localStorage.removeItem('userToken');
           navigate('/login');
+          showPurchaseAlert("👍 Changed profile Image successfully!");
         }
       } catch (err) {
         console.error(err);
@@ -147,17 +151,18 @@ export default function Profile({ saveUserData }) {
     } else {
       try {
         const res = await axios.post(
-          'https://emergancy-api-zdep.vercel.app/auth/changePassword',
+          'https://emergancy-api-kqk9.vercel.app/auth/changePassword',
           changePassword,
           {
             headers: {
+              'Content-Type': 'application/json',
               token: `Bearer ${localStorage.getItem('userToken')}`,
             },
           }
         );
 
-        if (res.data.message === 'changed Password successuflly') {
-          shownotificatonTest("Password changed successfully!<br>Please login again.");
+        if (res.data.message === "Password changed successfully") {
+          showPurchaseAlert("👍 Password changed successfully")
           localStorage.removeItem('userToken');
           navigate('/login');
         } else {

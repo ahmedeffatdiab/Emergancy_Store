@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import logo from '../../assets/images/logo/logo.svg'
 import { useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ApiContext } from '../../Context/ApiContext';
@@ -14,7 +13,6 @@ export default function Navbar({userData}) {
     const searchRef = useRef(null);
     const location = useLocation();
     const isSidebarAvailable = location.pathname === '/';
-    // Load user data on userState
     useEffect(()=>{
         getUserCart();
         getUserLoves();
@@ -23,24 +21,28 @@ export default function Navbar({userData}) {
         setUserState(token);
         }
     },[userState]);
-    // Trigger search on Enter key
-    const handleKeyPress = (event) => {
-        if(event.key=='Enter'){
-            getSearchData(searchRef.current.value)
-        }
-    };
-    // Fetch search results on input
+    const handleSearch = async () => {
+    const searchText = searchRef.current.value.trim();
+    if (searchText !== '') {
+      await getSearchData(searchText); // Fetch search data
+      navigate('/search'); // Navigate to search only after input
+    }
+  };
+    const handleKeyPress = async (event) => {
+    if (event.key === 'Enter') {
+      await handleSearch();
+    }
+  };
     function getTextFoSearch(){
         getSearchData(searchRef.current.value)
     }
-    // Log out user and redirect
     async function Logout(){
         localStorage.removeItem("userToken");
-        setUserState(false); // Update state to trigger re-render
+        setUserState(false); 
         navigate("/login");
         window.location.reload();
     }
-    //Fetch initial empty search results
+    
     useEffect(()=>{
         getSearchData('')
     },[])
@@ -111,43 +113,41 @@ export default function Navbar({userData}) {
                 </div>
                 <div className="header-main">
                     <div className="container">
-                    <a alt="logo" href="#" className="header-logo">
+                    <a alt="logo" href="#" className="header-logo" style={{color:"black"}}>
                         Emergancey
                     </a>
-                    <Link to="/search">
-                    <div className="input-group mb-3 w-100 m-auto mt-4">
-                    <span onClick={getTextFoSearch} className="input-group-text" id="basic-addon1"><i className="fa-solid fa-magnifying-glass"></i></span>
-                    <input id="searchInput" ref={searchRef} onKeyPress={handleKeyPress}  type="text" className="form-control  "   placeholder="Search Product...." aria-label="Username" aria-describedby="basic-addon1"/>
+                    <div>
+                        <div className="position-relative w-100 mt-4 mb-1">
+                            <input id="searchInput" ref={searchRef} onKeyDown={handleKeyPress} type="text" className="form-control ps-5" placeholder="Search Product..."/>
+                            <span onClick={getTextFoSearch} className="search-icon-inside" >
+                                <i className="fa-solid fa-magnifying-glass"></i>
+                            </span>
+                        </div>
                     </div>
-                    </Link>
                     
                     <div className="header-user-actions">
                         {userData && userData.user.isAdmin ? (
-                            <Link to="/dashBoard">
-                                <button className="action-btn">
+                            <Link to="/dashBoard" className='action-btn'>
+                                {/* <button className=""> */}
                                 <i className="fa-solid fa-table"></i>
-                            </button>
+                            {/* </button> */}
                             </Link>
                             
                             
                         ) : (
                         <div className='header-user-actions'>
                             
-                            <Link to="/cardsloves">
-                                <button className="action-btn">
-                                <i className="fa-solid fa-heart"></i>
-                                {
-                                userLove?
-                                <span className="count">{userLove}</span>
-                                    :null
-                                }
-                                </button>
+                            <Link to="/cardsloves" className='action-btn'>
+                                    <i className="fa-solid fa-heart"></i>
+                                    { localStorage.getItem("userToken") && typeof userLove === 'number' && (
+                                    <span className="count">{userLove}</span>
+                                    )}
                             </Link>
                             <button className="action-btn">
                                 <Link to="/cardsBought" className='text-dark'>
                                 <i className="fa-solid fa-cart-shopping"></i>
                                 {userData?
-                                <span className="count">{cartNum}</span>
+                                    <span className="count">{cartNum}</span>
                                 :null}
                                 </Link>
                             </button>
@@ -165,10 +165,24 @@ export default function Navbar({userData}) {
                 )}
                 {userData && userData.user.isAdmin ? "" : (
                     <button className="action-btn">
-                    <Link to="/cardsloves" className='text-dark'>
-                        <i className="fa-solid fa-heart"></i>
-                        {userLove ? <span className="count">{userLove}</span> : null}
-                    </Link>
+                    <Link to="/cardsloves">
+                                {/* <button className="action-btn">
+                                <i className="fa-solid fa-heart"></i>
+                                {
+                                userLove?
+                                    <span className="count">{userLove}</span>
+                                :
+                                  null
+                                }
+                                
+                                </button> */}
+                                <button className="action-btn">
+                                        <i className="fa-solid fa-heart"></i>
+                                        { localStorage.getItem("userToken") && typeof userLove === 'number' && (
+                                        <span className="count">{userLove}</span>
+                                        )}
+                                </button>
+                            </Link>
                     </button>
                 )}
                     <button className="action-btn">
@@ -185,9 +199,11 @@ export default function Navbar({userData}) {
                       </button>
                     )}
                     {userData && userData.user.isAdmin ? (
-                      <button className="action-btn" data-mobile-menu-open-btn>
-                        <i className="fa-solid fa-border-all"></i>
-                      </button>
+                     <Link to="/dashBoard">
+                                <button className="action-btn">
+                                <i className="fa-solid fa-table"></i>
+                            </button>
+                            </Link>
                     ) : ""}
             </div>
     </div>

@@ -14,12 +14,12 @@ const DashBoard = () => {
   
   // Fetches products and sets count
   async function getProducts(){
-    let resData=await axios.get("https://emergancy-api-zdep.vercel.app/getProducts");
+    let resData=await axios.get("https://emergancy-api-kqk9.vercel.app/getProducts");
     setProductLength(resData.data.dataLength)
   }
   // Fetches total number of users
   async function getUsers(){
-    let resData=await axios.get("https://emergancy-api-zdep.vercel.app/auth/getUsersNumber");
+    let resData=await axios.get("https://emergancy-api-kqk9.vercel.app/auth/getUsersNumber");
     setUserLength(resData.data.length)
   }
   // Clears session and logs out
@@ -61,7 +61,6 @@ const DashBoard = () => {
           <Link to="/dashBoard/Add-Products">Add Products</Link>
           <Link to="/dashBoard/Manage-Products">Manage Products</Link>
           <Link to="/dashBoard/orders">Orders</Link>
-          <a href="#">Settings</a>
           <a href="#" onClick={Logout}>Logout</a>
         </div>
               <div className="container">

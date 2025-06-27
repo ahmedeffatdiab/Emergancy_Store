@@ -6,7 +6,7 @@ import { ApiContext } from '../../Context/ApiContext';
 import StarRating from '../StarRating/StarRating';
 export default function Productslider() {
     const navigate=useNavigate()
-    let {addtoCart,addLove,shownotificaton,slideBarRef, XIconRef, hideSlideBar }=useContext(ApiContext)
+    let {addtoCart,addLove,showPurchaseAlert,slideBarRef, XIconRef, hideSlideBar }=useContext(ApiContext)
     const [clothes,setClothes]=useState({});
     const [clothesShowAll,setClothesAhowAll]=useState(false)
     const [Shoes,setShoes]=useState({});
@@ -16,10 +16,10 @@ export default function Productslider() {
     const [newProducts,setNewProducts]=useState({});
     async function getDataApi() {
   try {
-    let res = await axios.get("https://emergancy-api-zdep.vercel.app/getNewProducts");
+    let res = await axios.get("https://emergancy-api-kqk9.vercel.app/getNewProducts");
     setNewProducts(res.data.products);
 
-    let clothesData = await axios.get('https://emergancy-api-zdep.vercel.app/getDataByQuery/Clothes');
+    let clothesData = await axios.get('https://emergancy-api-kqk9.vercel.app/getDataByQuery/Clothes');
     if (clothesData.data.data.length > 4) {
       setClothes(clothesData.data.data.slice(0, 4));
       setClothesAhowAll(true);
@@ -28,7 +28,7 @@ export default function Productslider() {
       setClothesAhowAll(false);
     }
 
-    let shoesData = await axios.get('https://emergancy-api-zdep.vercel.app/getDataByQuery/Shoes');
+    let shoesData = await axios.get('https://emergancy-api-kqk9.vercel.app/getDataByQuery/Shoes');
     if (shoesData.data.data.length > 4) {
       setShoes(shoesData.data.data.slice(0, 4));
       setShoesAhowAll(true);
@@ -37,7 +37,7 @@ export default function Productslider() {
       setShoesAhowAll(false);
     }
 
-    let accessoriesData = await axios.get('https://emergancy-api-zdep.vercel.app/getDataByQuery/Accessories');
+    let accessoriesData = await axios.get('https://emergancy-api-kqk9.vercel.app/getDataByQuery/Accessories');
     if (accessoriesData.data.data.length > 4) {
       setAccessories(accessoriesData.data.data.slice(0, 4));
       setAccessoriesAhowAll(true);
@@ -53,7 +53,7 @@ export default function Productslider() {
     async function getProductData(id,title,price){
         let response= await addtoCart(id,title,price)
         if(response){
-            shownotificaton('You Add Product successfully !')
+            showPurchaseAlert('👍 You Add Product successfully !')
         }else{
             navigate("/login")
         }
@@ -61,7 +61,7 @@ export default function Productslider() {
     //This function handles adding a product to the user's "Loved" (favorites) list.
     async function loveProduct(id){
         await addLove(id);
-            shownotificaton('You Add Product Loved successfully ! ')
+            showPurchaseAlert('👍 You Add Product Loved successfully ! ')
     }
     //useEffect runs once on mount: it fetches product data and sets up accordion toggle behavior with cleanup on unmount.
     useEffect(()=>{

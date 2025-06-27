@@ -11,7 +11,7 @@ const Order = () => {
         return;
      }
     try{    
-        const resData = await axios.get("https://emergancy-api-zdep.vercel.app/getOrders", {
+        const resData = await axios.get("https://emergancy-api-kqk9.vercel.app/getOrders", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -24,7 +24,7 @@ const Order = () => {
   // Updates order status on server
   const handleStatusChange = async (orderId, orderIndex, newStatus) => {
     try {
-       await axios.put(`https://emergancy-api-zdep.vercel.app/orders/${orderId}/status`, {
+       await axios.put(`https://emergancy-api-kqk9.vercel.app/orders/${orderId}/status`, {
         orderIndex,
         newStatus
       });

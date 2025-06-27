@@ -4,10 +4,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import "../../App.css";
 import { ApiContext } from '../../Context/ApiContext';
 import StarRating from '../StarRating/StarRating';
+import RecommendedProducts from '../RecommendedProducts/RecommendedProducts';
 
 export default function CardItem() {
   const navigate = useNavigate();
-  const { addtoCart, shownotificaton } = useContext(ApiContext);
+  const { addtoCart, showPurchaseAlert } = useContext(ApiContext);
   const [dataApi, setDataApi] = useState({});
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [rating, setRating] = useState(0);
@@ -19,7 +20,7 @@ export default function CardItem() {
   const { id } = useParams();
   // Fetch product details by ID
   async function getProductItem(id) {
-    const res = await axios.get(`https://emergancy-api-zdep.vercel.app/getProductById/${id}`);
+    const res = await axios.get(`https://emergancy-api-kqk9.vercel.app/getProductById/${id}`);
     setDataApi(res.data.data);
   }
   // Set selected image
@@ -29,7 +30,7 @@ export default function CardItem() {
   // Add product to cart or redirect to login
   async function getProductData(id, title, price) {
     const response = await addtoCart(id, title, price);
-    response ? shownotificaton('You Add Product successfully !') : navigate("/login");
+    response ? showPurchaseAlert('👍 You Add Product successfully !') : navigate("/login");
   }
   // Handle star rating toggle
   const handleStarClick = (star) => {
@@ -39,7 +40,7 @@ export default function CardItem() {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const resData = await axios.post(`https://emergancy-api-zdep.vercel.app/${productId}/add-review`, {
+      const resData = await axios.post(`https://emergancy-api-kqk9.vercel.app/product/${productId}/add-review`, {
         rating,
         comment,
       }, {
@@ -48,7 +49,7 @@ export default function CardItem() {
         }
       });
       setDataApi(resData.data.data);
-      setMessage('Review submitted!');
+      showPurchaseAlert("👍 Review submitted");
       setRating(0);
       setComment('');
     } catch (error) {
@@ -90,6 +91,7 @@ export default function CardItem() {
   return (
     <div className="container">
       {dataApi ? (
+        <>
         <div className="outer-design my-5 px-2 border border-1">
           <div className="row">
             {/* Product Image Section */}
@@ -204,10 +206,17 @@ export default function CardItem() {
               )}
             </div>
           </div>
+          
         </div>
+          <div>
+              <RecommendedProducts categ={dataApi.category} title={dataApi.title} />
+          </div>
+        </>
+        
       ) : (
         <i className="fas fa-spinner m-auto fa-spin fa-4x"></i>
       )}
+      
     </div>
   );
 }

@@ -6,14 +6,14 @@ const ManageProduct = () => {
     const [produtctData,setProductData]=useState({});
     //Fetches and sets product data.
     async function getProducts(){
-        let resData=await axios.get("https://emergancy-api-zdep.vercel.app/getProducts/")
+        let resData=await axios.get("https://emergancy-api-kqk9.vercel.app/getProducts/")
         setProductData(resData.data.data)
     }
     //Deletes product and refreshes list
     const deleteProduct=async(id)=>{
         const token = localStorage.getItem("userToken");
         if(!token){return;}
-        await axios.get(`https://emergancy-api-zdep.vercel.app/deleteProduct/${id}`,{
+        await axios.get(`https://emergancy-api-kqk9.vercel.app/deleteProduct/${id}`,{
             headers:{
                 "token": `Bearer ${token}`,
             }

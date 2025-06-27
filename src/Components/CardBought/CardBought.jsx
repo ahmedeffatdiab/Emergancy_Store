@@ -45,12 +45,13 @@ export default function CardBought() {
   // Save product changes
   async function saveProductChange(productId, quantity) {
     try {
-      const res = await axios.get(`https://emergancy-api-zdep.vercel.app/saveProductChange/${productId}/${quantity}`, {
+      const res = await axios.get(`https://emergancy-api-kqk9.vercel.app/saveProductChange/${productId}/${quantity}`, {
         headers: {
+
           token: `Bearer ${localStorage.getItem('userToken')}`
         }
       });
-
+      console.log(res)
       if (res.data.message === 'Product quantity updated successfully') {
         await getUserCart();
       }
@@ -62,16 +63,13 @@ export default function CardBought() {
   // Delete product from cart
   async function deleteOrder(productId) {
     try {
-      const res = await axios.get(`https://emergancy-api-zdep.vercel.app/deleteProductfromCart/${productId}`, {
+      const res = await axios.get(`https://emergancy-api-kqk9.vercel.app/deleteProductfromCart/${productId}`, {
         headers: {
           token: `Bearer ${localStorage.getItem('userToken')}`
         }
       });
-
       if (
-        res.data.message === 'Product removed successfully' ||
-        res.data.message === 'Product removed, cart is now empty and deleted'
-      ) {
+        res.data.message === "Product removed successfully") {
         await getUserCart();
       }
     } catch (error) {
@@ -81,6 +79,7 @@ export default function CardBought() {
 
   return (
     <div className="container mt-3">
+      <h5 className='mt-3 text-decoration-underline'>Products Bought</h5>
       {cart?.selectedProduct?.length > 0 ? (
         <>
           <table className="table align-middle text-nowrap">

@@ -5,7 +5,7 @@ import { ApiContext } from '../../Context/ApiContext';
 
 const EditProduct = () => {
   const [replacedImages, setReplacedImages] = useState({});
-  const { shownotificaton,showPurchaseAlert}=useContext(ApiContext)
+  const { showPurchaseAlert}=useContext(ApiContext)
   const { id } = useParams();
   const [productData, setProductData] = useState({
     title: '',
@@ -19,7 +19,7 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-        const res = await axios.get(`https://emergancy-api-zdep.vercel.app/getProductById/${id}`);
+        const res = await axios.get(`https://emergancy-api-kqk9.vercel.app/getProductById/${id}`);
         setProductData(res.data.data);
       } catch (error) {
         console.error('Error fetching product data:', error);
@@ -65,19 +65,19 @@ const EditProduct = () => {
     formData.append('imageIndexes', JSON.stringify(indexes));
 
     try {
-      const res = await axios.post(`https://emergancy-api-zdep.vercel.app/edit-products/${id}`, formData, {
+      const res = await axios.post(`https://emergancy-api-kqk9.vercel.app/edit-products/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           token: `Bearer ${token}`,
         },
       });
       console.log('Upload successful:', res.data);
-       showPurchaseAlert("Product updated successfully!")
+       showPurchaseAlert("👍 Product updated successfully!")
       // alert('Product updated successfully!');  
 
     } catch (err) {
       console.error('Error updating product:', err);
-       showPurchaseAlert("Product updated failed!")
+       showPurchaseAlert("⚠️ Product updated failed!")
 
     }
   };

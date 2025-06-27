@@ -5,12 +5,12 @@ import { ApiContext } from '../../Context/ApiContext';
 import StarRating from '../StarRating/StarRating';
 
 export default function Blog() {
-  let {addtoCart,addLove,shownotificaton}=useContext(ApiContext)
+  let {addtoCart,addLove,showPurchaseAlert}=useContext(ApiContext)
   const [blogApi,setBlogApi]=useState({});
   const navigate=useNavigate()
   // Fetches blog data from API
   const getBlogApi=async ()=>{
-    let res=await axios.get("https://emergancy-api-zdep.vercel.app/getDataByQuery/suit");
+    let res=await axios.get("https://emergancy-api-kqk9.vercel.app/getDataByQuery/suit");
     setBlogApi(res.data.data)
   }
   // Truncates text to max length
@@ -30,7 +30,7 @@ export default function Blog() {
     console.log(response);
     if(response){
       console.log(response);
-      shownotificaton('You Add Product successfully !')
+      showPurchaseAlert("👍 You Add Product Loved successfully ! ")
     }else{
       navigate("/login")
     }
@@ -38,7 +38,7 @@ export default function Blog() {
   // Marks product as loved notification
   async function loveProduct(id){
     await addLove(id);
-    shownotificaton('You Add Product Loved successfully ! ')
+    showPurchaseAlert("👍 You Add Product Loved successfully ! ")
   }
   //Fetches blog data when the component mounts.
    useEffect(()=>{

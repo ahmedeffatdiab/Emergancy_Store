@@ -1,15 +1,30 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import StarRating from '../StarRating/StarRating';
+import { ApiContext } from '../../Context/ApiContext';
+
 export default function CardList() {
     const [dataApi2,setDataApi2]=useState([])
+    const {addtoCart,showPurchaseAlert}=useContext(ApiContext);
+    const navigate=useNavigate();
     const params=useParams()
     // Fetches filtered data by query
     async function filterByQuery(query){
-        let res=await axios.get(`https://emergancy-api-zdep.vercel.app/getDataByQuery/${query}`)
+        let res=await axios.get(`https://emergancy-api-kqk9.vercel.app/getDataByQuery/${query}`)
         setDataApi2(res.data.data);
     }
+
+     async function getProductData(id,title,price){
+    let response= await addtoCart(id,title,price)
+    console.log(response);
+    if(response){
+      console.log(response);
+      showPurchaseAlert("👍 You Add Product successfully !")
+    }else{
+      navigate("/login")
+    }
+  }
     // Truncates text with ellipsis.
     function truncateText(text) {
         if (text.length <= 15) {
@@ -31,7 +46,7 @@ export default function CardList() {
                     <div key={index} className="col-md-3 col-sm-12">
                     <div className="card">
                         {ele?.imageUrls[0] ? (
-                        <img src={ele.imageUrls[0]} style={{ height: "220px" }} className="card-img-top" alt="product" />
+                        <img src={ele.imageUrls[0]} style={{ height: "200px",width:"200px" }} className="card-img-top mx-auto mt-2 " alt="product" />
                         ) : (
                         <i className="fa-solid fa-spinner fa-spin"></i>
                         )}
@@ -61,9 +76,7 @@ export default function CardList() {
                             </div>
                         </div>
 
-                        <a href="#" className="btn btn-primary">
-                            Add to <i className="fa-solid fa-cart-shopping"></i>
-                        </a>
+                        <button onClick={()=>getProductData(ele._id,ele.title,ele.price)} className='btn btn-primary flex-end ' >add to <i className="fa-solid fa-cart-shopping "></i></button>
                         </div>
                     </div>
                     </div>

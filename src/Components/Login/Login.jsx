@@ -51,7 +51,7 @@ export default function Login({ saveUserData }) {
     // Send login data to server
     async function sendDataToServer() {
         try {
-            const res = await axios.post('http://127.0.0.1:3000/auth/login',
+            const res = await axios.post('https://emergancy-api-kqk9.vercel.app/auth/login',
             {
                 email: User.email,
                 password: User.password,

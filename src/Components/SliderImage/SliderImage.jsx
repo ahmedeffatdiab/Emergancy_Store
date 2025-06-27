@@ -11,7 +11,7 @@ export default function SliderImage() {
         <div className="carousel-inner">
           <div className="carousel-item active">
               <div className="slider-item h-100">
-              <img src="https://res.cloudinary.com/dptz3ognb/image/upload/v1750002651/Untitled-2_wzavr3.jpg" alt="women's latest fashion sale" className="banner-img"/>
+              <img src="https://res.cloudinary.com/dptz3ognb/image/upload/v1750002650/Untitled-3_gzqall.jpg" alt="women's latest fashion sale" className="banner-img"/>
               <div className="banner-content">
                   <p className="banner-subtitle">Trending item</p>
                   <h2 className="banner-title">Women's latest fashion sale</h2>
@@ -20,7 +20,7 @@ export default function SliderImage() {
           </div>
           <div className="carousel-item">
           <div className="slider-item h-100">
-              <img src="https://res.cloudinary.com/dptz3ognb/image/upload/v1750002650/Untitled-3_gzqall.jpg" alt="women's latest fashion sale" className="banner-img"/>
+              <img src="https://res.cloudinary.com/dptz3ognb/image/upload/v1750002651/Untitled-2_wzavr3.jpg" alt="women's latest fashion sale" className="banner-img"/>
               <div className="banner-content">
                       <p className="banner-subtitle">Trending accessories</p>
                       <h2 className="banner-title">Modern sunglasses</h2>
