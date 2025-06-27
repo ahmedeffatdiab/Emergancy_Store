@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/Emergancy_Store/static/css/main.77b2d5b5.css",
-    "main.js": "/Emergancy_Store/static/js/main.66043152.js",
+    "main.css": "/Emergancy_Store/static/css/main.66ad0a8b.css",
+    "main.js": "/Emergancy_Store/static/js/main.2c1e75f7.js",
     "static/js/787.bc7d429a.chunk.js": "/Emergancy_Store/static/js/787.bc7d429a.chunk.js",
     "static/media/fa-solid-900.ttf": "/Emergancy_Store/static/media/fa-solid-900.4a2cd718d7031b732e76.ttf",
     "static/media/fa-brands-400.ttf": "/Emergancy_Store/static/media/fa-brands-400.150de8eaa454d669c405.ttf",
@@ -12,13 +12,12 @@
     "static/media/fa-v4compatibility.ttf": "/Emergancy_Store/static/media/fa-v4compatibility.0e3a648be390bd8cb094.ttf",
     "static/media/fa-v4compatibility.woff2": "/Emergancy_Store/static/media/fa-v4compatibility.68577e40f3e70067b5da.woff2",
     "index.html": "/Emergancy_Store/index.html",
-    "static/media/logo.svg": "/Emergancy_Store/static/media/logo.4632e7848eb28b4f2baccce8d72ea87f.svg",
-    "main.77b2d5b5.css.map": "/Emergancy_Store/static/css/main.77b2d5b5.css.map",
-    "main.66043152.js.map": "/Emergancy_Store/static/js/main.66043152.js.map",
+    "main.66ad0a8b.css.map": "/Emergancy_Store/static/css/main.66ad0a8b.css.map",
+    "main.2c1e75f7.js.map": "/Emergancy_Store/static/js/main.2c1e75f7.js.map",
     "787.bc7d429a.chunk.js.map": "/Emergancy_Store/static/js/787.bc7d429a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.77b2d5b5.css",
-    "static/js/main.66043152.js"
+    "static/css/main.66ad0a8b.css",
+    "static/js/main.2c1e75f7.js"
   ]
 }
